@@ -2,6 +2,7 @@ package com.vendora.controllers;
 
 import com.vendora.models.OrderItems;
 import com.vendora.services.OrderItemServicesImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class OrderItemsController {
    }
 
     @PostMapping("/create")
-    public ResponseEntity<OrderItems> createOrderItem(@RequestBody OrderItems orderItems){
+    public ResponseEntity<OrderItems> createOrderItem(@Valid @RequestBody OrderItems orderItems){
         return orderItemServices.createOrderItem(orderItems);
     }
 

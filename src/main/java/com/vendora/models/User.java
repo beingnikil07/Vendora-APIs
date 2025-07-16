@@ -1,5 +1,9 @@
 package com.vendora.models;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -9,12 +13,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
+
+    @NotNull(message = "user name is required")
+    @Size(min = 3, max = 50,message ="user name length must be between 3 to 50")
     private String name;
+
     @Column(unique = true)
+    @NotNull(message = "Email is required")
+    @Email(message = "Please enter a valid email address")
     private String email;
+
+    @NotNull(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+
     private String address;
     private LocalDateTime created_at;
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
     private String phone_no;
 
 

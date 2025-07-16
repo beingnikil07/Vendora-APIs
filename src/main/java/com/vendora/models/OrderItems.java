@@ -2,6 +2,8 @@ package com.vendora.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 
 @Entity
@@ -16,14 +18,21 @@ public class OrderItems {
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     @JsonIgnore
+    @NotNull(message = "Order must not be null")
     private Order order; // Use 'order' here, not 'order_id'
 
     // Many order items refer to one product
     @ManyToOne
     @JoinColumn(name ="product_id", referencedColumnName = "product_id")
+    @NotNull(message = "Product must not be null")
     private Product product;
 
+    @NotNull(message = "Quantity is required")
+    @Positive(message = "Quantity must be greater than 0")
     private Integer quantity;
+
+    @NotNull(message = "Price per item is required")
+    @Positive(message = "Price per item must be greater than 0")
     private Double price_each;
 
     // Getters & Setters

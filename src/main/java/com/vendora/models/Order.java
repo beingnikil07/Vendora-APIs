@@ -1,6 +1,8 @@
 package com.vendora.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,14 +16,22 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @NotNull(message = "User must not be null")
     private User user;
 
     private LocalDateTime order_date;
+
+    @NotNull(message = "Total amount must not be null")
+    @Positive(message = "Total amount must be a positive value")
     private Double total_amount;
+
+    @NotBlank(message = "Order status must not be blank")
+    @Size(max = 20, message = "Status can be at most 20 characters")
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItems> orderItems;
+    @NotEmpty(message = "Order must contain at least one item")
+    private List<@Valid OrderItems> orderItems;
 
     @PrePersist
     public void prePersist() {

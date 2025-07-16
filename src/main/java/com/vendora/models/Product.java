@@ -2,6 +2,10 @@ package com.vendora.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,22 +14,37 @@ import java.util.List;
 @Table(name = "products")
 public class Product {
     @Id
+    @NotNull(message = "Product id cannot be null")
     private Integer product_id;
+
+    @NotNull(message = "Product name cannot be null")
+    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     private String name;
+
     private String description;
+
+    @NotNull(message = "Price cannot be null")
+    @Positive(message = "price must be greater than zero")
     private Double price;
+
+    @NotNull(message = "stock quantity cannot be null")
+    @Positive(message = "stock quantity must be greater than 0")
     private Integer stock_quantity;
+
     //Many products can have one category
     @ManyToOne
     @JoinColumn(name = "category_id" ,referencedColumnName ="category_id")
+    @NotNull(message = "Product category is required")
     private Category category_id;
+
     private String image_url;
 
     private LocalDateTime created_at;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("orderItems")
-    private List<OrderItems> orderItems;
+    private List<@Valid OrderItems> orderItems;
+
 
     public List<OrderItems> getOrderItems() {
         return orderItems;

@@ -2,6 +2,7 @@ package com.vendora.controllers;
 
 import com.vendora.models.Order;
 import com.vendora.services.OrderServicesImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +17,13 @@ public class OrdersController {
 
     //create a order
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order) {
        return  orderServices.createOrder(order);
     }
 
     //Update a Order
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Order> updateOrder(@RequestBody Order order,@PathVariable Integer id) {
+    public ResponseEntity<Order> updateOrder(@Valid @RequestBody Order order,@PathVariable Integer id) {
         return orderServices.updateOrder(order,id);
     }
 

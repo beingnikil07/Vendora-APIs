@@ -2,6 +2,7 @@ package com.vendora.controllers;
 
 import com.vendora.models.Product;
 import com.vendora.services.ProductServices;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +19,12 @@ public class ProductsController {
 
     //create a product
     @PostMapping("/create")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         return productService.createProduct(product);
     }
     //update the product
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product,@PathVariable Integer id) {
+    public ResponseEntity<Product> updateProduct(@Valid  @RequestBody Product product,@PathVariable Integer id) {
         return  productService.updateProduct(product,id);
     }
 

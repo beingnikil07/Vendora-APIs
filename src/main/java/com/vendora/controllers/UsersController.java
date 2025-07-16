@@ -1,6 +1,7 @@
 package com.vendora.controllers;
 import com.vendora.models.User;
 import com.vendora.services.UserServices;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,12 @@ public class UsersController {
     }
 
     @PostMapping("/create")
-    public User createUser(@RequestBody User user){
+    public User createUser(@Valid @RequestBody User user){
         return userServices.createUser(user);
     }
 
     @PatchMapping("/update/{user_id}")
-    public ResponseEntity<User> updateUserDetails(@PathVariable Integer user_id, @RequestBody User user){
+    public ResponseEntity<User> updateUserDetails(@Valid @PathVariable Integer user_id, @RequestBody User user){
         return userServices.updateUser(user_id,user);
     }
 
