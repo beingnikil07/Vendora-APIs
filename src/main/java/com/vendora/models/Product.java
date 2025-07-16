@@ -1,8 +1,10 @@
 package com.vendora.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -20,6 +22,18 @@ public class Product {
     private String image_url;
 
     private LocalDateTime created_at;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("orderItems")
+    private List<OrderItems> orderItems;
+
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     @PrePersist
     public void onCreate() {
