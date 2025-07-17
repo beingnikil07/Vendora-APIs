@@ -1,14 +1,12 @@
 package com.vendora.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Entity
 @Table(name = "products")
@@ -41,18 +39,6 @@ public class Product {
 
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("orderItems")
-    private List<@Valid OrderItems> orderItems;
-
-
-    public List<OrderItems> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItems> orderItems) {
-        this.orderItems = orderItems;
-    }
 
     @PrePersist
     public void onCreate() {
@@ -62,10 +48,6 @@ public class Product {
 
     public LocalDateTime getCreated_at() {
         return created_at;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
     }
 
     public String getImage_url() {
@@ -123,4 +105,5 @@ public class Product {
     public void setProduct_id(Integer product_id) {
         this.product_id = product_id;
     }
+
 }

@@ -1,5 +1,7 @@
 package com.vendora.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -17,6 +19,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @NotNull(message = "User must not be null")
+    @JsonIgnoreProperties({"email","name","password","address","created_at","phone_no"})
     private User user;
 
     private LocalDateTime order_date;
@@ -31,6 +34,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @NotEmpty(message = "Order must contain at least one item")
+    @JsonIgnore
     private List<@Valid OrderItems> orderItems;
 
     @PrePersist
@@ -86,5 +90,10 @@ public class Order {
 
     public void setOrderItems(List<OrderItems> orderItems) {
         this.orderItems = orderItems;
+        if (orderItems != null) {
+            for (OrderItems item : orderItems) {
+                item.setOrder(this);
+            }
+        }
     }
 }

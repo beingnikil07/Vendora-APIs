@@ -22,7 +22,7 @@ public class CategoryController {
 
     //To update a category
     @PatchMapping("/update/{category_id}")
-    public ResponseEntity<Category> update(@Valid @RequestBody Category category,@PathVariable Integer category_id) {
+    public ResponseEntity<Category> update(@RequestBody Category category,@PathVariable Integer category_id) {
         return  categoryServices.updateCategory(category,category_id);
     }
 

@@ -19,4 +19,9 @@ public class OrderItemsController {
         return orderItemServices.createOrderItem(orderItems);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<OrderItems> deleteOrderItem(@PathVariable("id") Integer id)
+    {
+        return orderItemServices.deleteOrderItem(id);
+    }
 }

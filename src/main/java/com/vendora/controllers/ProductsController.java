@@ -24,7 +24,7 @@ public class ProductsController {
     }
     //update the product
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Product> updateProduct(@Valid  @RequestBody Product product,@PathVariable Integer id) {
+    public ResponseEntity<Product> updateProduct( @RequestBody Product product,@PathVariable Integer id) {
         return  productService.updateProduct(product,id);
     }
 

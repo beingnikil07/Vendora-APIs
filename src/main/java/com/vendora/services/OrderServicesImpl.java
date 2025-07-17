@@ -1,7 +1,11 @@
 package com.vendora.services;
 
 import com.vendora.models.Order;
+import com.vendora.models.OrderItems;
+import com.vendora.models.Product;
 import com.vendora.repository.OrderRepository;
+import com.vendora.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,14 +22,24 @@ public class OrderServicesImpl implements com.vendora.services.OrderServices {
         this.orderRepository = orderRepository;
     }
 
+    @Autowired
+    private ProductRepository productRepository;
+
     //TO create a order
     @Override
     public ResponseEntity<Order> createOrder(Order order) {
-        if(order==null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        for (OrderItems item : order.getOrderItems()) {
+            Integer productId = item.getProduct().getProduct_id();
+            Product existingProduct = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+            item.setProduct(existingProduct); // attach managed entity
         }
-        orderRepository.save(order);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+
+        order.setOrderItems(order.getOrderItems()); // re-trigger order-setting logic
+
+        Order savedOrder = orderRepository.save(order);
+        return ResponseEntity.ok(savedOrder);
     }
 
     //To update a order

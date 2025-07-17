@@ -23,7 +23,7 @@ public class OrdersController {
 
     //Update a Order
     @PatchMapping("/update/{id}")
-    public ResponseEntity<Order> updateOrder(@Valid @RequestBody Order order,@PathVariable Integer id) {
+    public ResponseEntity<Order> updateOrder(@RequestBody Order order,@PathVariable Integer id) {
         return orderServices.updateOrder(order,id);
     }
 

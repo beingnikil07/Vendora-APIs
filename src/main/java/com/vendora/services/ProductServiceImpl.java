@@ -61,9 +61,6 @@ public class ProductServiceImpl implements ProductServices {
         if (product.getImage_url()!=null){
             existProd.setImage_url(product.getImage_url());
         }
-        if(product.getCreated_at()!=null){
-            existProd.setCreated_at(product.getCreated_at());
-        }
         //save the existed product
         productRepository.save(existProd);
         return ResponseEntity.ok().body(existProd);

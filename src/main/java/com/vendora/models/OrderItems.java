@@ -17,7 +17,6 @@ public class OrderItems {
     // Many order items belong to one Order
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
-    @JsonIgnore
     @NotNull(message = "Order must not be null")
     private Order order; // Use 'order' here, not 'order_id'
 
