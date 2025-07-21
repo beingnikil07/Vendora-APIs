@@ -2,11 +2,11 @@ package com.vendora.services;
 
 import com.vendora.models.User;
 import com.vendora.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserServicesImpl implements UserServices{
@@ -80,8 +80,8 @@ public class UserServicesImpl implements UserServices{
         }
 
         @Override
-        public ResponseEntity<List<User>> getAllUsers() {
-                return ResponseEntity.ok(userRepository.findAll());
+        public Page<User> getAllUsers(Pageable pageable) {
+                return userRepository.findAll(pageable);
         }
 
 }

@@ -3,6 +3,8 @@ package com.vendora.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name ="auth_user")
@@ -15,12 +17,17 @@ public class AuthUsers {
 
     @Column(unique = true)
     @Schema(description = "username is required for the authentication")
+    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
+    @NotBlank(message="Username cannot be blank")
     private String username;
 
     @Schema(description = "Password is required for authentication and authorization")
+    @Size(min = 6, max = 100, message = "Password must be at least 6 characters")
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
     @Schema(description = "Role is required ")
+    @NotBlank(message = "Role cannot be blank")
     private String role;
 
 

@@ -5,6 +5,10 @@ import com.vendora.services.ProductServices;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,8 +61,14 @@ public class ProductsController {
     @GetMapping(value = "/getProducts",
             produces = "application/json")
     @Operation(summary = "Get all products",description = "You can get all the products using this api.")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<Page<Product>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue ="2") int size,
+                                                        @RequestParam(defaultValue ="name") String sortBy) {
+
+        Pageable pageable= PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Product> products=productService.getAllProducts(pageable);
+        return ResponseEntity.ok(products);
+
     }
 
 }

@@ -4,7 +4,9 @@ import com.vendora.models.AuthUsers;
 import com.vendora.repository.AuthUserRepository;
 import com.vendora.services.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,14 @@ public class AuthController {
     //To register a user
     @PostMapping(value ="/register",
     consumes = "application/json")
-    @Operation(summary ="Register the user for the authentication")
-    public ResponseEntity<String> register(@RequestBody AuthUsers user){
+    @Operation(
+            summary = "Register the user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully registered"),
+                    @ApiResponse(responseCode = "401", description = "please provide correct input")
+            }
+    )
+    public ResponseEntity<String> register(@Valid @RequestBody AuthUsers user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         authUserRepository.save(user);
         return ResponseEntity.ok().body("user registered Successfully");
@@ -37,7 +45,16 @@ public class AuthController {
 
 
     // To Login a user
-    @PostMapping("/login")
+    @PostMapping(value = "/login",
+    consumes = "application/json")
+    @Operation(
+            summary = "Login the user for the authorization",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully logged in"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized - invalid credentials")
+            }
+    )
+
     public ResponseEntity<String> login(@RequestBody AuthUsers user){
         boolean isAuthenticated= authService.authenticateUser(user.getUsername(),user.getPassword());
         if(isAuthenticated){

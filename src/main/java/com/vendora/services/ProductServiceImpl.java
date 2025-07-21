@@ -2,13 +2,12 @@ package com.vendora.services;
 
 import com.vendora.models.Product;
 import com.vendora.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -87,10 +86,10 @@ public class ProductServiceImpl implements ProductServices {
         return ResponseEntity.ok(product);
     }
 
-    @Override
-    public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products=productRepository.findAll();
-        return ResponseEntity.ok().body(products);
 
+    @Override
+    public Page<Product> getAllProducts(Pageable pageable) {
+            Page<Product> products=productRepository.findAll(pageable);
+            return products;
     }
 }
