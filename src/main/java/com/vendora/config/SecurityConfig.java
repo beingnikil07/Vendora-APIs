@@ -22,16 +22,26 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return  http.csrf().disable()
+        return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**","/swagger-ui/**","v3/api-docs/**").permitAll()
+                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutUrl("/api/auth/logout")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(200);
+                    response.getWriter().write("You have been logged out");
+                })
                 .and()
                 .httpBasic()
                 .and()
                 .authenticationProvider(authProvider())
                 .build();
     }
+
 
     @Bean
     public DaoAuthenticationProvider authProvider() {
