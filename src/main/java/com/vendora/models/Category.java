@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "categories")
 @Schema(name ="categories" ,description = "Details about the categories of product")
+
 public class Category {
     @Id
     @NotNull(message = "Category id cannot be null,please provide a id ")

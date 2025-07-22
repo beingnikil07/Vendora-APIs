@@ -2,6 +2,8 @@ package com.vendora.services;
 
 import com.vendora.models.Product;
 import com.vendora.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,22 +22,31 @@ public class ProductServiceImpl implements ProductServices {
         this.productRepository = productRepository;
     }
 
+    //Logger
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+
     //create product
     @Override
     public ResponseEntity<Product> createProduct(Product product) {
+        logger.info("Attempting to create product with Name:{}", product.getName());
         if (product == null){
+            logger.info("Product with Name:{} not found", product.getName());
             ResponseEntity.notFound().build();
         }
         Product prod=productRepository.save(product);
+        logger.info("Product with Name:{} created successfully", prod.getName());
         return ResponseEntity.ok().body(prod);
     }
 
     @Override
     public ResponseEntity<Product> updateProduct(Product product,Integer id) {
+        logger.info("Attempting to update product with Id:{}", id);
         //check if product is exist or not
         Optional<Product> optionalProd=productRepository.findById(id);
 
         if (optionalProd.isEmpty()){
+            logger.info("Product with Id:{} not found", id);
             ResponseEntity.notFound().build();
         }
         Product existProd=optionalProd.get();
@@ -62,6 +73,7 @@ public class ProductServiceImpl implements ProductServices {
         }
         //save the existed product
         productRepository.save(existProd);
+        logger.info("Product with Id:{} updated successfully", id);
         return ResponseEntity.ok().body(existProd);
     }
 
@@ -69,11 +81,14 @@ public class ProductServiceImpl implements ProductServices {
     //Delete a Product
     @Override
     public ResponseEntity<Product> deleteProduct(Integer id) {
+        logger.info("Attempting to delete product with Id:{}", id);
         //check whether product exist or not
         if(productRepository.existsById(id)){
             productRepository.deleteById(id);
+            logger.info("Product with Id:{} deleted successfully", id);
             return ResponseEntity.ok().build();
         }
+     logger.info("Product with Id:{} not found", id);
      return ResponseEntity.notFound().build();
     }
 
@@ -81,15 +96,19 @@ public class ProductServiceImpl implements ProductServices {
     //get single product
     @Override
     public ResponseEntity<Product> getProduct(Integer id) {
+        logger.info("Attempting to get product with Id:{}", id);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+
         return ResponseEntity.ok(product);
     }
 
 
     @Override
     public Page<Product> getAllProducts(Pageable pageable) {
+            logger.info("Attempting to get all products with Pageable:{}", pageable);
             Page<Product> products=productRepository.findAll(pageable);
+            logger.info("Product with Pageable:{} found successfully", pageable);
             return products;
     }
 }
