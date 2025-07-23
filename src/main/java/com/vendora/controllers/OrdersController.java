@@ -52,7 +52,6 @@ public class OrdersController {
     //Delete a order
     @Operation(summary = "delete an order",description = "You can delete an order by using this api.")
     @DeleteMapping(value = "/delete/{id}",
-            consumes = "application/json",
             produces = "application/json")
     public ResponseEntity<Order> deleteOrder(@PathVariable Integer id) {
         logger.info("Deleting an order...");
